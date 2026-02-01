@@ -10,3 +10,9 @@ The application is intended for **students and individuals** who want a straight
 - Organizing transactions within a financial account
 - Viewing monthly summaries and spending totals
 - Saving and loading the entire application state
+
+**User Stories**
+- As a user, I want to be able to add a new transaction to my account and specify the amount, category, and date.
+- As a user, I want to be able to view a list of all transactions currently recorded in my account.
+- As a user, I want to be able to filter my transactions by a specific category to see how much I've spent on things like "Food" or "Rent".
+- As a user, I want to be able to see the total current balance of my account.
