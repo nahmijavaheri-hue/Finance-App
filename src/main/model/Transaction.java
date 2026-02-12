@@ -9,7 +9,7 @@ public class Transaction {
     private final String description; //description of transaction (like Food, Shopping, etc.)
 
     /* 
-    * REQUIRES: amount >= 0
+    * REQUIRES: amount > 0.0
     * MODIFIES: this
     * EFFECTS: creates transaction with specified positive amount, time and date, 
     *          transaction type, and description.
@@ -22,7 +22,7 @@ public class Transaction {
     }
 
     /* 
-    * REQUIRES: amount >= 0
+    * REQUIRES: amount > 0.0
     * MODIFIES: this
     * EFFECTS: creates transaction with specified positive amount, current time and date,
     *          specified transaction type, and description.
@@ -35,7 +35,7 @@ public class Transaction {
     }
 
     /* 
-    * REQUIRES: amount >= 0
+    * REQUIRES: amount > 0.0
     * MODIFIES: this
     * EFFECTS: creates transaction with specified positive amount, current time and date,
     *          specified transaction type, and unspecified description.
