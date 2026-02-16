@@ -49,9 +49,11 @@ public class testTransaction {
     @Test
     void testGetCategory() {
         assertEquals(transactionCategory.PAYCHEQUE, transaction1.getCategory());
+        assertEquals(transactionType.INCOME, transaction1.getCategory().getType());
         assertEquals(transactionCategory.OTHER_OUT, transaction2.getCategory());
         assertEquals(transactionCategory.OTHER_IN, transaction3.getCategory());
-          assertEquals(transactionCategory.OTHER_IN, transaction4.getCategory());
+        assertEquals(transactionCategory.OTHER_IN, transaction4.getCategory());
+
     }
 
     @Test
