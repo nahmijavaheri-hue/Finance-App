@@ -1,12 +1,11 @@
 package model;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Transaction {
     private final double amount; //amount of transaction
     private final LocalDateTime dateTime; //time and date of transaction
     private final transactionType type; //type of transaction (INCOME, EXPENSE, or REFUND)
-    private final String description; //description of transaction (like Food, Shopping, etc.)
+    private final transactionCategory category; //category of transaction (FOOD, SHOPPING, etc.)
 
     /* 
     * REQUIRES: amount > 0.0
@@ -14,24 +13,11 @@ public class Transaction {
     * EFFECTS: creates transaction with specified positive amount, time and date, 
     *          transaction type, and description.
     */
-    public Transaction(double amount, LocalDateTime dateTime, transactionType type, String description) {
+    public Transaction(double amount, LocalDateTime dateTime, transactionType type, transactionCategory category) {
         this.amount = amount;
         this.dateTime = dateTime;
         this.type = type;
-        this.description = description;
-    }
-
-    /* 
-    * REQUIRES: amount > 0.0
-    * MODIFIES: this
-    * EFFECTS: creates transaction with specified positive amount, current time and date,
-    *          specified transaction type, and description.
-    */
-    public Transaction(double amount, transactionType type, String description) {
-        this.amount = amount;
-        this.dateTime = LocalDateTime.now();
-        this.type = type;
-        this.description = description;
+        this.category = category;
     }
 
     /* 
@@ -40,27 +26,31 @@ public class Transaction {
     * EFFECTS: creates transaction with specified positive amount, current time and date,
     *          specified transaction type, and unspecified description.
     */
-    public Transaction(double amount, transactionType type) {
+    public Transaction(double amount, LocalDateTime dateTime, transactionType type) {
         this.amount = amount;
-        this.dateTime = LocalDateTime.now();
+        this.dateTime = dateTime;
         this.type = type;
-        this.description = "Unspecified";
+            if (type == transactionType.INCOME || type == transactionType.REFUND) this.category = transactionCategory.OTHER_IN;
+        else this.category = transactionCategory.OTHER_OUT;
     }
 
     public double getAmount() {
         return 0.0; //stub
     }
 
-    public LocalDate getDateAndTime() {
+    public LocalDateTime getDateAndTime() {
         return null; //stub
     }
 
-    public String getDescription() {
-        return ""; //stub
+    public transactionCategory getCategory() {
+        return null; //stub
     }
  
     public transactionType getTransactionType() {
         return null; //stub
     }
 
+    public double getSignedAmount() {
+        return 0.0; //stub
+    }
 }
