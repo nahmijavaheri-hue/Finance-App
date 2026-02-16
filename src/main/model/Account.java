@@ -37,19 +37,19 @@ public class Account {
     }
 
     public String getName() {
-        return ""; // stub
+        return name;
     }
 
     public int getId() {
-        return -1; // stub
+        return id;
     }
 
     public List<Transaction> getTransactions() {
-        return null; // stub
+        return transactions;
     }
 
     public double getBalance() {
-        return 0.0; // stub
+        return balance;
     }
 
     /*
@@ -59,7 +59,10 @@ public class Account {
      * list
      */
     public void addTransaction(Transaction transaction) {
-
+        if (!transactions.contains(transaction)) {
+            transactions.add(transaction);
+            balance += transaction.getSignedAmount();
+        }
     }
 
     /*
@@ -69,7 +72,14 @@ public class Account {
      * and returns false if transaction is not contained in transactions
      */
     public boolean removeTransaction(Transaction transaction) {
-        return false; // stub
+        for (Transaction t : transactions) {
+            if (t.equals(transaction)) {
+                balance -= t.getSignedAmount();
+                transactions.remove(t);
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
@@ -77,11 +87,11 @@ public class Account {
      * EFFECTS: clears list of transactions
      */
     public void clearTransactions() {
-
+        transactions.clear();
     }
 
     public int getTransactionCount() {
-        return -1; // stub
+        return transactions.size();
     }
 
     /*
@@ -89,7 +99,7 @@ public class Account {
      * this account
      */
     public boolean canFindTransaction(Transaction transaction) {
-        return false; // stub
+        return transactions.contains(transaction);
     }
 
     /*
@@ -97,14 +107,24 @@ public class Account {
      * by order added to list
      */
     public Transaction getLastTransaction() {
-        return null;
+        if (transactions.isEmpty()) {
+            return null;
+        } else {
+            return sortByDate(transactions, true).get(0);
+        }
     }
 
     /*
      * EFFECTS: returns list of transactions which occured in that month and year
      */
     public List<Transaction> getTransactionsByMonth(int month, int year) {
-        return null; // stub
+        List<Transaction> transactionsByMonth = new ArrayList<>();
+        for (Transaction t : transactions) {
+            if (t.getDateAndTime().getMonthValue() == month && t.getDateAndTime().getYear() == year) {
+                transactionsByMonth.add(t);
+            }
+        }
+        return transactionsByMonth;
     }
 
     /*
@@ -112,7 +132,12 @@ public class Account {
      * given month and year
      */
     public double getAverageExpensesByMonth(int month, int year) {
-        return 0.0; // stub
+        List<Transaction> expensesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.EXPENSE);
+        double sum = 0.0;
+        for (Transaction t : expensesByMonth) {
+            sum += t.getSignedAmount();
+        }
+        return sum / expensesByMonth.size();
     }
 
     /*
@@ -120,11 +145,16 @@ public class Account {
      * in given month and year
      */
     public double getAverageIncomeByMonth(int month, int year) {
-        return 0.0; // stub
+        List<Transaction> expensesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.INCOME);
+        double sum = 0.0;
+        for (Transaction t : expensesByMonth) {
+            sum += t.getAmount();
+        }
+        return sum / expensesByMonth.size();
     }
 
     public List<Transaction> getTransactionsNewToOld() {
-        return null; // stub
+        return sortByDate(transactions, true);
     }
 
     /*
@@ -138,7 +168,18 @@ public class Account {
      * income transactions sorted from newest to oldest.
      */
     public List<Transaction> filterByType(List<Transaction> toFilter, sortOrder order, transactionType type) {
-        return null; // stub
+        switch (order) {
+            case NEWEST:
+                return sortByDate(sortByType(toFilter, type), true);
+            case OLDEST:
+                return sortByDate(sortByType(toFilter, type), false);
+            case LARGEST:
+                return sortByAmount(sortByType(toFilter, type), true);
+            case SMALLEST:
+                return sortByAmount(sortByType(toFilter, type), false);
+            default:
+                return sortByType(toFilter, type);
+        }
     }
 
     /*
@@ -153,7 +194,18 @@ public class Account {
      */
     public List<Transaction> filterByCategory(List<Transaction> toFilter, sortOrder order,
             transactionCategory category) {
-        return null; // stub
+        switch (order) {
+            case NEWEST:
+                return sortByDate(sortByCategory(toFilter, category), true);
+            case OLDEST:
+                return sortByDate(sortByCategory(toFilter, category), false);
+            case LARGEST:
+                return sortByAmount(sortByCategory(toFilter, category), true);
+            case SMALLEST:
+                return sortByAmount(sortByCategory(toFilter, category), false);
+            default:
+                return sortByCategory(toFilter, category);
+        }
     }
 
     /*
@@ -163,7 +215,13 @@ public class Account {
      * transactions by date
      */
     protected List<Transaction> sortByDate(List<Transaction> toSort, boolean newest) {
-        return null; // stub
+        List<Transaction> sorted = new ArrayList<>(toSort);
+        if (newest) {
+            sorted.sort(Comparator.comparing(Transaction::getDateAndTime).reversed());
+        } else {
+            sorted.sort(Comparator.comparing(Transaction::getDateAndTime));
+        }
+        return sorted;
     }
 
     /*
@@ -172,7 +230,16 @@ public class Account {
      * unless type is null which returns the given list of transactions
      */
     protected List<Transaction> sortByType(List<Transaction> toSort, transactionType type) {
-        return null; // stub
+        if (type == null) {
+            return new ArrayList<>(toSort);
+        }
+        List<Transaction> sorted = new ArrayList<>();
+        for (Transaction t : toSort) {
+            if (t.getTransactionType().equals(type)) {
+                sorted.add(t);
+            }
+        }
+        return sorted;
     }
 
     /*
@@ -182,7 +249,13 @@ public class Account {
      * transactions by amount
      */
     protected List<Transaction> sortByAmount(List<Transaction> toSort, boolean largest) {
-        return null; // stub
+        List<Transaction> sorted = new ArrayList<>(toSort);
+        if (largest) {
+            sorted.sort(Comparator.comparingDouble(Transaction::getSignedAmount).reversed());
+        } else {
+            sorted.sort(Comparator.comparingDouble(Transaction::getSignedAmount));
+        }
+        return sorted;
     }
 
     /*
@@ -191,6 +264,15 @@ public class Account {
      * unless type is null which returns the given list of transactions
      */
     protected List<Transaction> sortByCategory(List<Transaction> toSort, transactionCategory category) {
-        return null; // stub
+        if (category == null) {
+            return new ArrayList<>(toSort);
+        }
+        List<Transaction> sorted = new ArrayList<>();
+        for (Transaction t : toSort) {
+            if (t.getCategory().equals(category)) {
+                sorted.add(t);
+            }
+        }
+        return sorted;
     }
 }
