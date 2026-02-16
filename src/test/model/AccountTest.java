@@ -202,6 +202,7 @@ public class AccountTest {
 
     @Test
     void testGetAverageExpensesByMonth() {
+        assertEquals(0.0, account1.getAverageExpensesByMonth(6, 2026));
         account1.addTransaction(transaction1);
         account1.addTransaction(transaction2);
         account1.addTransaction(transaction3);
@@ -217,6 +218,7 @@ public class AccountTest {
 
     @Test
     void testGetAverageIncomeByMonth() {
+        assertEquals(0.0, account1.getAverageIncomeByMonth(6, 2026));
         account1.addTransaction(transaction1);
         account1.addTransaction(transaction2);
         account1.addTransaction(transaction3);
