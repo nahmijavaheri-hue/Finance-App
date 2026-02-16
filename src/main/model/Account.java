@@ -133,6 +133,9 @@ public class Account {
      */
     public double getAverageExpensesByMonth(int month, int year) {
         List<Transaction> expensesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.EXPENSE);
+        if (expensesByMonth.isEmpty()) {
+            return 0.0;
+        }
         double sum = 0.0;
         for (Transaction t : expensesByMonth) {
             sum += t.getSignedAmount();
@@ -145,12 +148,15 @@ public class Account {
      * in given month and year
      */
     public double getAverageIncomeByMonth(int month, int year) {
-        List<Transaction> expensesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.INCOME);
+        List<Transaction> incomesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.INCOME);
+        if (incomesByMonth.isEmpty()) {
+            return 0.0;
+        }
         double sum = 0.0;
-        for (Transaction t : expensesByMonth) {
+        for (Transaction t : incomesByMonth) {
             sum += t.getAmount();
         }
-        return sum / expensesByMonth.size();
+        return sum / incomesByMonth.size();
     }
 
     public List<Transaction> getTransactionsNewToOld() {
