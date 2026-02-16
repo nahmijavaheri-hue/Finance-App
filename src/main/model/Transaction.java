@@ -35,22 +35,26 @@ public class Transaction {
     }
 
     public double getAmount() {
-        return 0.0; //stub
+        return amount;
     }
 
     public LocalDateTime getDateAndTime() {
-        return null; //stub
+        return dateTime;
     }
 
     public transactionCategory getCategory() {
-        return null; //stub
+        return category;
     }
  
     public transactionType getTransactionType() {
-        return null; //stub
+        return type;
     }
 
     public double getSignedAmount() {
-        return 0.0; //stub
+        if (this.type == transactionType.EXPENSE) {
+            return -this.amount;
+        }
+        return this.amount;
     }
+
 }
