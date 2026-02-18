@@ -16,3 +16,5 @@ The application is intended for **students and individuals** who want a straight
 - As a user, I want to be able to view a list of all transactions currently recorded in my account.
 - As a user, I want to be able to filter my transactions by a specific category to see how much I've spent on things like "Food" or "Rent".
 - As a user, I want to be able to see the total current balance of my account.
+- As a user, I want to be able to save my account(s) to a file (if I so choose)
+- As a user, I want to be able to load my account(s) from a previously saved file (if I so choose)
