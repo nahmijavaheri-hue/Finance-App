@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+//Represents an account with a list of transactions, name, id, and balance/
 public class Account {
     private List<Transaction> transactions; // list of all transactions associated with this account
     private String name; // name of this account

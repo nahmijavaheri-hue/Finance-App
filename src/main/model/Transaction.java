@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 
+//Represents a transaction with an amount, date and time, type, and category.
 public class Transaction {
     private final double amount; // amount of transaction
     private final LocalDateTime dateTime; // time and date of transaction
