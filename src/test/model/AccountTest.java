@@ -24,25 +24,25 @@ public class AccountTest {
     @BeforeEach
     void runBefore() {
         transaction1 = new Transaction(100, LocalDateTime.of(2026, 2, 3, 12, 30, 30),
-                transactionType.INCOME, transactionCategory.PAYCHEQUE);
+                TransactionType.INCOME, TransactionCategory.PAYCHEQUE);
         transaction2 = new Transaction(50, LocalDateTime.of(2026, 6, 20, 12, 30, 30),
-                transactionType.EXPENSE, transactionCategory.FOOD);
+                TransactionType.EXPENSE, TransactionCategory.FOOD);
         transaction3 = new Transaction(70, LocalDateTime.of(2026, 6, 14, 12, 30, 30),
-                transactionType.EXPENSE, transactionCategory.SHOPPING);
+                TransactionType.EXPENSE, TransactionCategory.SHOPPING);
         transaction4 = new Transaction(200, LocalDateTime.of(2026, 5, 17, 12, 30, 30),
-                transactionType.INCOME, transactionCategory.TRANSFER_IN);
+                TransactionType.INCOME, TransactionCategory.TRANSFER_IN);
         transaction5 = new Transaction(20, LocalDateTime.of(2026, 10, 22, 12, 30, 30),
-                transactionType.EXPENSE, transactionCategory.SHOPPING);
+                TransactionType.EXPENSE, TransactionCategory.SHOPPING);
         transaction6 = new Transaction(20, LocalDateTime.of(2026, 2, 5, 12, 30, 30),
-                transactionType.REFUND, transactionCategory.OTHER_IN);
+                TransactionType.REFUND, TransactionCategory.OTHER_IN);
         transaction7 = new Transaction(300, LocalDateTime.of(2026, 6, 9, 12, 30, 30),
-                transactionType.EXPENSE, transactionCategory.RENT);
+                TransactionType.EXPENSE, TransactionCategory.RENT);
         transaction8 = new Transaction(400, LocalDateTime.of(2026, 6, 20, 12, 30, 30),
-                transactionType.INCOME, transactionCategory.PAYCHEQUE);
+                TransactionType.INCOME, TransactionCategory.PAYCHEQUE);
         transaction9 = new Transaction(50, LocalDateTime.of(2026, 8, 10, 12, 30, 30),
-                transactionType.EXPENSE, transactionCategory.FOOD);
+                TransactionType.EXPENSE, TransactionCategory.FOOD);
         transaction10 = new Transaction(100, LocalDateTime.of(2026, 2, 12, 12, 30, 30),
-                transactionType.EXPENSE, transactionCategory.TRANSFER_OUT);
+                TransactionType.EXPENSE, TransactionCategory.TRANSFER_OUT);
         account1 = new Account("Chequing", 123);
         account2 = new Account("Savings", 456, 100);
     }
@@ -256,13 +256,13 @@ public class AccountTest {
         account1.addTransaction(transaction2);
         account1.addTransaction(transaction6);
         assertEquals(List.of(transaction8, transaction4, transaction1),
-                account1.filterByType(account1.getTransactions(), sortOrder.NEWEST, transactionType.INCOME));
+                account1.filterByType(account1.getTransactions(), SortOrder.NEWEST, TransactionType.INCOME));
         assertEquals(List.of(transaction2),
-                account1.filterByType(account1.getTransactions(), sortOrder.NEWEST, transactionType.EXPENSE));
+                account1.filterByType(account1.getTransactions(), SortOrder.NEWEST, TransactionType.EXPENSE));
         assertEquals(List.of(transaction6),
-                account1.filterByType(account1.getTransactions(), sortOrder.NEWEST, transactionType.REFUND));
+                account1.filterByType(account1.getTransactions(), SortOrder.NEWEST, TransactionType.REFUND));
         assertEquals(List.of(transaction8, transaction2, transaction4, transaction6, transaction1),
-                account1.filterByType(account1.getTransactions(), sortOrder.NEWEST, null));
+                account1.filterByType(account1.getTransactions(), SortOrder.NEWEST, null));
     }
 
     @Test
@@ -272,13 +272,13 @@ public class AccountTest {
         account1.addTransaction(transaction8);
         account1.addTransaction(transaction6);
         assertEquals(List.of(transaction1, transaction4, transaction8),
-                account1.filterByType(account1.getTransactions(), sortOrder.OLDEST, transactionType.INCOME));
+                account1.filterByType(account1.getTransactions(), SortOrder.OLDEST, TransactionType.INCOME));
         assertTrue(
-                account1.filterByType(account1.getTransactions(), sortOrder.OLDEST, transactionType.EXPENSE).isEmpty());
+                account1.filterByType(account1.getTransactions(), SortOrder.OLDEST, TransactionType.EXPENSE).isEmpty());
         assertEquals(List.of(transaction6),
-                account1.filterByType(account1.getTransactions(), sortOrder.OLDEST, transactionType.REFUND));
+                account1.filterByType(account1.getTransactions(), SortOrder.OLDEST, TransactionType.REFUND));
         assertEquals(List.of(transaction1, transaction6, transaction4, transaction8),
-                account1.filterByType(account1.getTransactions(), sortOrder.OLDEST, null));
+                account1.filterByType(account1.getTransactions(), SortOrder.OLDEST, null));
     }
 
     @Test
@@ -287,12 +287,12 @@ public class AccountTest {
         account1.addTransaction(transaction4);
         account1.addTransaction(transaction8);
         assertEquals(List.of(transaction8, transaction4, transaction1),
-                account1.filterByType(account1.getTransactions(), sortOrder.LARGEST, transactionType.INCOME));
+                account1.filterByType(account1.getTransactions(), SortOrder.LARGEST, TransactionType.INCOME));
         assertEquals(0,
-                account1.filterByType(account1.getTransactions(), sortOrder.LARGEST, transactionType.EXPENSE).size());
+                account1.filterByType(account1.getTransactions(), SortOrder.LARGEST, TransactionType.EXPENSE).size());
         assertEquals(0,
-                account1.filterByType(account1.getTransactions(), sortOrder.LARGEST, transactionType.REFUND).size());
-        assertEquals(transaction8, account1.filterByType(account1.getTransactions(), sortOrder.LARGEST, null).get(0));
+                account1.filterByType(account1.getTransactions(), SortOrder.LARGEST, TransactionType.REFUND).size());
+        assertEquals(transaction8, account1.filterByType(account1.getTransactions(), SortOrder.LARGEST, null).get(0));
     }
 
     @Test
@@ -301,12 +301,12 @@ public class AccountTest {
         account1.addTransaction(transaction4);
         account1.addTransaction(transaction8);
         assertEquals(List.of(transaction1, transaction4, transaction8),
-                account1.filterByType(account1.getTransactions(), sortOrder.SMALLEST, transactionType.INCOME));
+                account1.filterByType(account1.getTransactions(), SortOrder.SMALLEST, TransactionType.INCOME));
         assertEquals(0,
-                account1.filterByType(account1.getTransactions(), sortOrder.SMALLEST, transactionType.EXPENSE).size());
+                account1.filterByType(account1.getTransactions(), SortOrder.SMALLEST, TransactionType.EXPENSE).size());
         assertEquals(0,
-                account1.filterByType(account1.getTransactions(), sortOrder.SMALLEST, transactionType.REFUND).size());
-        assertEquals(transaction1, account1.filterByType(account1.getTransactions(), sortOrder.SMALLEST, null).get(0));
+                account1.filterByType(account1.getTransactions(), SortOrder.SMALLEST, TransactionType.REFUND).size());
+        assertEquals(transaction1, account1.filterByType(account1.getTransactions(), SortOrder.SMALLEST, null).get(0));
     }
 
     @Test
@@ -314,12 +314,12 @@ public class AccountTest {
         account1.addTransaction(transaction1);
         account1.addTransaction(transaction4);
         assertEquals(2,
-                account1.filterByType(account1.getTransactions(), sortOrder.NONE, transactionType.INCOME).size());
+                account1.filterByType(account1.getTransactions(), SortOrder.NONE, TransactionType.INCOME).size());
         assertEquals(0,
-                account1.filterByType(account1.getTransactions(), sortOrder.NONE, transactionType.EXPENSE).size());
+                account1.filterByType(account1.getTransactions(), SortOrder.NONE, TransactionType.EXPENSE).size());
         assertEquals(0,
-                account1.filterByType(account1.getTransactions(), sortOrder.NONE, transactionType.REFUND).size());
-        assertEquals(2, account1.filterByType(account1.getTransactions(), sortOrder.NONE, null).size());
+                account1.filterByType(account1.getTransactions(), SortOrder.NONE, TransactionType.REFUND).size());
+        assertEquals(2, account1.filterByType(account1.getTransactions(), SortOrder.NONE, null).size());
     }
 
     @Test
@@ -327,14 +327,14 @@ public class AccountTest {
         account1.addTransaction(transaction2);
         account1.addTransaction(transaction9);
         assertEquals(List.of(transaction9, transaction2),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.NEWEST, transactionCategory.FOOD));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.NEWEST, TransactionCategory.FOOD));
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.NEWEST, transactionCategory.PAYCHEQUE).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.NEWEST, TransactionCategory.PAYCHEQUE).size());
         account1.addTransaction(transaction6);
         assertEquals(List.of(transaction6),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.NEWEST, transactionCategory.OTHER_IN));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.NEWEST, TransactionCategory.OTHER_IN));
         assertEquals(List.of(transaction9, transaction2, transaction6),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.NEWEST, null));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.NEWEST, null));
     }
 
     @Test
@@ -342,13 +342,13 @@ public class AccountTest {
         account1.addTransaction(transaction2);
         account1.addTransaction(transaction9);
         assertEquals(List.of(transaction2, transaction9),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.OLDEST, transactionCategory.FOOD));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.OLDEST, TransactionCategory.FOOD));
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.OLDEST, transactionCategory.PAYCHEQUE).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.OLDEST, TransactionCategory.PAYCHEQUE).size());
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.OLDEST, transactionCategory.OTHER_IN).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.OLDEST, TransactionCategory.OTHER_IN).size());
         assertEquals(List.of(transaction2, transaction9),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.OLDEST, null));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.OLDEST, null));
     }
 
     @Test
@@ -356,13 +356,13 @@ public class AccountTest {
         account1.addTransaction(transaction3);
         account1.addTransaction(transaction5);
         assertEquals(List.of(transaction5, transaction3),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.LARGEST, transactionCategory.SHOPPING));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.LARGEST, TransactionCategory.SHOPPING));
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.LARGEST, transactionCategory.PAYCHEQUE).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.LARGEST, TransactionCategory.PAYCHEQUE).size());
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.LARGEST, transactionCategory.OTHER_IN).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.LARGEST, TransactionCategory.OTHER_IN).size());
         assertEquals(List.of(transaction5, transaction3),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.LARGEST, null));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.LARGEST, null));
     }
 
     @Test
@@ -370,27 +370,27 @@ public class AccountTest {
         account1.addTransaction(transaction3);
         account1.addTransaction(transaction5); // SHOPPING: -70, -20
         assertEquals(List.of(transaction3, transaction5), account1.filterByCategory(account1.getTransactions(),
-                sortOrder.SMALLEST, transactionCategory.SHOPPING));
+                SortOrder.SMALLEST, TransactionCategory.SHOPPING));
         assertEquals(0,
-                account1.filterByCategory(account1.getTransactions(), sortOrder.SMALLEST, transactionCategory.PAYCHEQUE)
+                account1.filterByCategory(account1.getTransactions(), SortOrder.SMALLEST, TransactionCategory.PAYCHEQUE)
                         .size());
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.SMALLEST, transactionCategory.OTHER_IN).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.SMALLEST, TransactionCategory.OTHER_IN).size());
         assertEquals(List.of(transaction3, transaction5),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.SMALLEST, null));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.SMALLEST, null));
     }
 
     @Test
     void testFilterByCategoryNone() {
         account1.addTransaction(transaction2);
         assertEquals(1,
-                account1.filterByCategory(account1.getTransactions(), sortOrder.NONE, transactionCategory.FOOD).size());
+                account1.filterByCategory(account1.getTransactions(), SortOrder.NONE, TransactionCategory.FOOD).size());
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.NONE, transactionCategory.PAYCHEQUE).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.NONE, TransactionCategory.PAYCHEQUE).size());
         assertEquals(0, account1
-                .filterByCategory(account1.getTransactions(), sortOrder.NONE, transactionCategory.OTHER_IN).size());
+                .filterByCategory(account1.getTransactions(), SortOrder.NONE, TransactionCategory.OTHER_IN).size());
         assertEquals(List.of(transaction2),
-                account1.filterByCategory(account1.getTransactions(), sortOrder.NONE, null));
+                account1.filterByCategory(account1.getTransactions(), SortOrder.NONE, null));
     }
 
     @Test
@@ -408,9 +408,9 @@ public class AccountTest {
         assertTrue(account1.sortByType(account1.getTransactions(), null).isEmpty());
         account1.addTransaction(transaction1);
         account1.addTransaction(transaction2);
-        List<Transaction> incomeOnly = account1.sortByType(account1.getTransactions(), transactionType.INCOME);
+        List<Transaction> incomeOnly = account1.sortByType(account1.getTransactions(), TransactionType.INCOME);
         assertEquals(1, incomeOnly.size());
-        assertEquals(transactionType.INCOME, incomeOnly.get(0).getTransactionType());
+        assertEquals(TransactionType.INCOME, incomeOnly.get(0).getTransactionType());
     }
 
     @Test
@@ -428,9 +428,9 @@ public class AccountTest {
         assertTrue(account1.sortByCategory(account1.getTransactions(), null).isEmpty());
         account1.addTransaction(transaction1);
         account1.addTransaction(transaction7);
-        List<Transaction> rentOnly = account1.sortByCategory(account1.getTransactions(), transactionCategory.RENT);
+        List<Transaction> rentOnly = account1.sortByCategory(account1.getTransactions(), TransactionCategory.RENT);
         assertEquals(1, rentOnly.size());
-        assertEquals(transactionCategory.RENT, rentOnly.get(0).getCategory());
+        assertEquals(TransactionCategory.RENT, rentOnly.get(0).getCategory());
     }
 
 }

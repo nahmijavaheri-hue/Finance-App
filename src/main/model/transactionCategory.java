@@ -1,25 +1,25 @@
 package model;
 
-public enum transactionCategory {
+public enum TransactionCategory {
     // Income Categories 
-    PAYCHEQUE(transactionType.INCOME),
-    OTHER_IN(transactionType.INCOME),
-    TRANSFER_IN(transactionType.INCOME),
+    PAYCHEQUE(TransactionType.INCOME),
+    OTHER_IN(TransactionType.INCOME),
+    TRANSFER_IN(TransactionType.INCOME),
 
     // Expense Categories
-    FOOD(transactionType.EXPENSE),
-    RENT(transactionType.EXPENSE),
-    SHOPPING(transactionType.EXPENSE),
-    OTHER_OUT(transactionType.EXPENSE),
-    TRANSFER_OUT(transactionType.EXPENSE);
+    FOOD(TransactionType.EXPENSE),
+    RENT(TransactionType.EXPENSE),
+    SHOPPING(TransactionType.EXPENSE),
+    OTHER_OUT(TransactionType.EXPENSE),
+    TRANSFER_OUT(TransactionType.EXPENSE);
 
-    private final transactionType type;
+    private final TransactionType type;
 
-    transactionCategory(transactionType type) {
+    TransactionCategory(TransactionType type) {
         this.type = type;
     }
 
-    public transactionType getType() {
+    public TransactionType getType() {
         return type;
     }
 

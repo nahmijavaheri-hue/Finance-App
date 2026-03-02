@@ -3,9 +3,12 @@ package model;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 //Represents an account with a list of transactions, name, id, and balance/
-public class Account {
+public class Account implements Writable {
     private List<Transaction> transactions; // list of all transactions associated with this account
     private String name; // name of this account
     private int id; // id of this account
@@ -133,7 +136,7 @@ public class Account {
      * given month and year
      */
     public double getAverageExpensesByMonth(int month, int year) {
-        List<Transaction> expensesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.EXPENSE);
+        List<Transaction> expensesByMonth = sortByType(getTransactionsByMonth(month, year), TransactionType.EXPENSE);
         if (expensesByMonth.isEmpty()) {
             return 0.0;
         }
@@ -149,7 +152,7 @@ public class Account {
      * in given month and year
      */
     public double getAverageIncomeByMonth(int month, int year) {
-        List<Transaction> incomesByMonth = sortByType(getTransactionsByMonth(month, year), transactionType.INCOME);
+        List<Transaction> incomesByMonth = sortByType(getTransactionsByMonth(month, year), TransactionType.INCOME);
         if (incomesByMonth.isEmpty()) {
             return 0.0;
         }
@@ -174,7 +177,7 @@ public class Account {
      * the returned list will comprise of
      * income transactions sorted from newest to oldest.
      */
-    public List<Transaction> filterByType(List<Transaction> toFilter, sortOrder order, transactionType type) {
+    public List<Transaction> filterByType(List<Transaction> toFilter, SortOrder order, TransactionType type) {
         switch (order) {
             case NEWEST:
                 return sortByDate(sortByType(toFilter, type), true);
@@ -199,8 +202,8 @@ public class Account {
      * PAYCHEQUE, then the returned list will comprise of
      * PAYCHEQUE transactions sorted from newest to oldest.
      */
-    public List<Transaction> filterByCategory(List<Transaction> toFilter, sortOrder order,
-            transactionCategory category) {
+    public List<Transaction> filterByCategory(List<Transaction> toFilter, SortOrder order,
+            TransactionCategory category) {
         switch (order) {
             case NEWEST:
                 return sortByDate(sortByCategory(toFilter, category), true);
@@ -236,7 +239,7 @@ public class Account {
      * transactions with that given type,
      * unless type is null which returns the given list of transactions
      */
-    protected List<Transaction> sortByType(List<Transaction> toSort, transactionType type) {
+    protected List<Transaction> sortByType(List<Transaction> toSort, TransactionType type) {
         if (type == null) {
             return new ArrayList<>(toSort);
         }
@@ -270,7 +273,7 @@ public class Account {
      * list of transactions with that given category,
      * unless type is null which returns the given list of transactions
      */
-    protected List<Transaction> sortByCategory(List<Transaction> toSort, transactionCategory category) {
+    protected List<Transaction> sortByCategory(List<Transaction> toSort, TransactionCategory category) {
         if (category == null) {
             return new ArrayList<>(toSort);
         }
@@ -281,5 +284,25 @@ public class Account {
             }
         }
         return sorted;
+    }
+
+    @Override
+    // EFFECTS: returns this as JSON object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("id", id);
+        json.put("balance", balance);
+        json.put("transactions", transactionsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns transactions in this account as a JSON array
+    private JSONArray transactionsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Transaction t : transactions) {
+            jsonArray.put(t.toJson());
+        }
+        return jsonArray;
     }
 }

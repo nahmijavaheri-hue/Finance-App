@@ -1,6 +1,6 @@
 package model;
 
-public enum sortOrder {
+public enum SortOrder {
     NEWEST,
     OLDEST,
     LARGEST,
