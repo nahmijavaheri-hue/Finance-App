@@ -1,6 +1,11 @@
 package ui;
 
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,6 +16,9 @@ import java.util.Scanner;
 public class SimpleFinanceApp {
     private Account account;
     private Scanner input;
+    private static final String JSON_STORE = "./data/account.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: sets up the account and starts the application
     public SimpleFinanceApp() {
@@ -53,6 +61,10 @@ public class SimpleFinanceApp {
             filterTransactions();
         } else if (command.equals("m")) {
             viewMetrics();
+        } else if (command.equals("s")) {
+            saveAccount();
+        } else if (command.equals("l")) {
+            loadAccount();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -65,6 +77,8 @@ public class SimpleFinanceApp {
         account = new Account("Primary Account", 1, 0.0);
         input = new Scanner(System.in);
         input.useDelimiter("\r?\n|\r"); //
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     // EFFECTS: displays the main menu of options to the user
@@ -77,6 +91,8 @@ public class SimpleFinanceApp {
         System.out.println("\tv -> View All (Chronological)");
         System.out.println("\tf -> Filter by Keyword");
         System.out.println("\tm -> View Monthly Metrics");
+        System.out.println("\ts -> Save Account to file");
+        System.out.println("\tl -> Load Account from file");
         System.out.println("\tq -> Quit");
         System.out.print("> ");
     }
@@ -85,8 +101,8 @@ public class SimpleFinanceApp {
     // EFFECTS: adds a transaction with custom date/time, type, category, and amount
     private void makeTransaction() {
         LocalDateTime dt = readDateTime();
-        transactionType type = readType();
-        transactionCategory category = readCategory(type);
+        TransactionType type = readType();
+        TransactionCategory category = readCategory(type);
 
         System.out.print("Enter amount (must be > 0): ");
         double amount = input.nextDouble();
@@ -123,33 +139,33 @@ public class SimpleFinanceApp {
     }
 
     // EFFECTS: prompts user to select a transaction type
-    private transactionType readType() {
+    private TransactionType readType() {
         System.out.println("Select type: (I)ncome, (E)xpense, (R)efund");
         String choice = input.next().toUpperCase();
         if (choice.equals("I")) {
-            return transactionType.INCOME;
+            return TransactionType.INCOME;
         }
         if (choice.equals("R")) {
-            return transactionType.REFUND;
+            return TransactionType.REFUND;
         }
-        return transactionType.EXPENSE;
+        return TransactionType.EXPENSE;
     }
 
     // EFFECTS: prompts user for a category based on the transaction type
-    private transactionCategory readCategory(transactionType type) {
+    private TransactionCategory readCategory(TransactionType type) {
         System.out.println("Select Category Number:");
-        if (type == transactionType.INCOME || type == transactionType.REFUND) {
+        if (type == TransactionType.INCOME || type == TransactionType.REFUND) {
             System.out.println("1: PAYCHEQUE, 2: TRANSFER_IN, 3: OTHER_IN");
             int choice = input.nextInt();
-            return (choice == 1) ? transactionCategory.PAYCHEQUE
-                    : (choice == 2) ? transactionCategory.TRANSFER_IN : transactionCategory.OTHER_IN;
+            return (choice == 1) ? TransactionCategory.PAYCHEQUE
+                    : (choice == 2) ? TransactionCategory.TRANSFER_IN : TransactionCategory.OTHER_IN;
         } else {
             System.out.println("1: FOOD, 2: RENT, 3: SHOPPING, 4: TRANSFER_OUT, 5: OTHER_OUT");
             int choice = input.nextInt();
-            return (choice == 1) ? transactionCategory.FOOD
-                    : (choice == 2) ? transactionCategory.RENT
-                            : (choice == 3) ? transactionCategory.SHOPPING
-                                    : (choice == 4) ? transactionCategory.TRANSFER_OUT : transactionCategory.OTHER_OUT;
+            return (choice == 1) ? TransactionCategory.FOOD
+                    : (choice == 2) ? TransactionCategory.RENT
+                            : (choice == 3) ? TransactionCategory.SHOPPING
+                                    : (choice == 4) ? TransactionCategory.TRANSFER_OUT : TransactionCategory.OTHER_OUT;
         }
     }
 
@@ -215,6 +231,29 @@ public class SimpleFinanceApp {
         for (Transaction t : transactions) {
             System.out.printf("%s | %-12s | %-10s | $%.2f\n",
                     t.getDateAndTime(), t.getTransactionType(), t.getCategory(), t.getSignedAmount());
+        }
+    }
+
+    // EFFECTS: saves the account to file
+    private void saveAccount() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(account);
+            jsonWriter.close();
+            System.out.println("Saved " + account.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads account from file
+    private void loadAccount() {
+        try {
+            account = jsonReader.read();
+            System.out.println("Loaded " + account.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 }
