@@ -18,15 +18,24 @@ public class JsonWriter {
     // MODIFIES: this
     // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot
     // be opened for writing
-    public void open() throws FileNotFoundException {}
+    public void open() throws FileNotFoundException {
+        writer = new PrintWriter(new File(destination));
+    }
 
     // MODIFIES: this
     // EFFECTS: writes JSON representation of account to file
-    public void write(Account acc) {}
+    public void write(Account acc) {
+        JSONObject json = acc.toJson();
+        saveToFile(json.toString(TAB));
+    }
 
     // MODIFIES: this
     // EFFECTS: closes writer
-    public void close() {}
+    public void close() {
+        writer.close();
+    }
 
-    private void saveToFile(String json) {}
+    private void saveToFile(String json) {
+        writer.print(json);
+    }
 }
