@@ -1,0 +1,19 @@
+{
+    "name": "My Account",
+    "id": 1,
+    "balance": 50.0,
+    "transactions": [
+        {
+            "amount": 100.0,
+            "dateTime": "2026-02-03T12:30:30",
+            "type": "INCOME",
+            "category": "PAYCHEQUE"
+        },
+        {
+            "amount": 50.0,
+            "dateTime": "2026-06-20T12:30:30",
+            "type": "EXPENSE",
+            "category": "FOOD"
+        }
+    ]
+}
