@@ -40,7 +40,7 @@ public class JsonReader {
         double balance = jsonObject.getDouble("balance");
         
         // Use the constructor with initial balance
-        Account acc = new Account(name, id, balance);
+        Account acc = new Account(name, id, 0.0);
         addTransactions(acc, jsonObject);
         return acc;
     }
