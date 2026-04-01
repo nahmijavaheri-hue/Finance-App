@@ -6,6 +6,10 @@ import persistence.JsonWriter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import model.EventLog;
+import model.Event;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +19,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 // Graphical user interface for personal finance tracking
 public class SimpleFinanceGUI extends JFrame implements ActionListener {
@@ -45,6 +51,16 @@ public class SimpleFinanceGUI extends JFrame implements ActionListener {
 
         setLocationRelativeTo(null);
         setVisible(true);
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                for (Event next : EventLog.getInstance()) {
+                    System.out.println(next.toString());
+                }
+                System.exit(0);
+            }
+        });
     }
 
     /*
@@ -449,5 +465,6 @@ public class SimpleFinanceGUI extends JFrame implements ActionListener {
             g2.drawString("Avg Income", 75, chartBase + 20);
             g2.drawString("Avg Expense", 205, chartBase + 20);
         }
+
     }
 }

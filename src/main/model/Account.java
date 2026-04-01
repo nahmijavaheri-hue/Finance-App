@@ -66,6 +66,8 @@ public class Account implements Writable {
         if (!transactions.contains(transaction)) {
             transactions.add(transaction);
             balance += transaction.getSignedAmount();
+            EventLog.getInstance().logEvent(new Event("Added transaction: " 
+                    + transaction.getCategory() + " ($" + transaction.getAmount() + ")"));
         }
     }
 
@@ -80,6 +82,7 @@ public class Account implements Writable {
             if (t.equals(transaction)) {
                 balance -= t.getSignedAmount();
                 transactions.remove(t);
+                EventLog.getInstance().logEvent(new Event("Removed transaction: " + t.getCategory()));
                 return true;
             }
         }
@@ -92,6 +95,7 @@ public class Account implements Writable {
      */
     public void clearTransactions() {
         transactions.clear();
+        EventLog.getInstance().logEvent(new Event("Cleared all transactions from account: " + name));
     }
 
     public int getTransactionCount() {

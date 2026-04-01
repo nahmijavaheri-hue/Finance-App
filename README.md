@@ -32,3 +32,11 @@ The application is intended for **students and individuals** who want a straight
 - You can save the state of my application by clicking the "Save Data" button at the bottom navigation panel.
 
 - You can reload the state of my application by clicking the "Load Data" button at the bottom navigation panel.
+
+# Phase 4: Task 2
+Wed Apr 01 09:44:01 PDT 2026
+Added transaction: PAYCHEQUE ($234.0)
+Wed Apr 01 09:44:14 PDT 2026
+Added transaction: FOOD ($34.0)
+Wed Apr 01 09:44:19 PDT 2026
+Removed transaction: FOOD
