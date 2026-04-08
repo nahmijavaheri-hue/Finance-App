@@ -40,3 +40,6 @@ Wed Apr 01 09:44:14 PDT 2026
 Added transaction: FOOD ($34.0)
 Wed Apr 01 09:44:19 PDT 2026
 Removed transaction: FOOD
+
+# Phase 4: Task 3
+My UML class diagram shows that the Account class is directly tied to the EventLog class for its logging duties. If I had more time, I would try to separate these parts. I would change the code so that the Account just tells other parts of the system when something changes, and then a separate logging class would listen for those signals to create the log entries. This would make the model simpler and easier to test because it wouldn't need to know how the logging works.
