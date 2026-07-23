@@ -1,45 +1,71 @@
 # Simple Finance
-### A Personal Finance & Expense Tracker
 
-**Simple Finance** is a Java desktop application designed to help users track their income and expenses in an organized and intuitive way. The application allows users to record financial transactions within an account, assign categories, and view summaries such as monthly totals and category-based spending breakdowns. The project will begin as a console-based program and later be expanded into a full graphical user interface.
+### A personal finance & expense tracker, written from scratch in Java
 
-The application is intended for **students and individuals** who want a straightforward and offline tool for managing their personal finances. This project is interesting to me because finance tracking is a real-world problem, and building this application provides an opportunity to practice object-oriented programming, data persistence, and graphical user interface development in Java.
+**Simple Finance** is a Java desktop application for tracking income and expenses. Transactions live inside an account, are tagged with a category (food, rent, shopping, paycheque, transfers, etc.), and can be filtered, sorted, and summarized — with everything backed by JSON persistence and a Swing GUI that graphs income vs. expenses in real time.
 
-**Key features include:**
-- Adding and viewing income and expense transactions
-- Organizing transactions within a financial account
-- Viewing monthly summaries and spending totals
-- Saving and loading the entire application state
+I built this to get hands-on with object-oriented design, file persistence, and building a real desktop UI in Java — starting as a console app and growing into a full graphical interface.
 
-**User Stories**
-- As a user, I want to be able to add a new transaction to my account and specify the amount, category, and date.
-- As a user, I want to be able to view a list of all transactions currently recorded in my account.
-- As a user, I want to be able to filter my transactions by a specific category to see how much I've spent on things like "Food" or "Rent".
-- As a user, I want to be able to see the total current balance of my account.
-- As a user, I want to be able to save my account(s) to a file (if I so choose)
-- As a user, I want to be able to load my account(s) from a previously saved file (if I so choose)
+---
 
-# Instructions for End User
+## Features
 
-- You can view the panel that displays the Xs that have already been added to the Y by looking at the scrolling JList panel in the center of the viewport.
+- **Transaction tracking** — add income, expenses, and refunds with an amount, date/time, and category
+- **Categorized spending** — nine built-in categories (paycheque, other income, transfers in/out, food, rent, shopping, other expenses), each tied to a transaction type
+- **Filtering & sorting** — filter by category or type, sort by date (newest/oldest) or amount (largest/smallest)
+- **Monthly summaries** — average income and average expenses for a given month/year
+- **Live balance tracking** — running account balance updates as transactions are added or removed
+- **JSON persistence** — save and reload the entire account state to/from disk
+- **Event logging** — every mutation (transaction added/removed/cleared) is recorded via a singleton `EventLog`, printed out on close
+- **Swing GUI** — scrollable transaction list, add/remove controls, a live income-vs-expenses bar chart, and save/load buttons
 
-- You can generate the first required action related to the user story "adding multiple Xs to a Y" by clicking the "Add Transaction" button on the right control sidebar panel.
+## Using the app
 
-- You can generate the second required action related to the user story "adding multiple Xs to a Y" by selecting an item in the scrolling pane and clicking the "Remove Selected" button.
+- The center panel shows a scrolling list of every transaction currently recorded in the account.
+- **Add Transaction** (right sidebar) opens a form to record a new transaction — amount, category, date.
+- Select a transaction in the list and click **Remove Selected** to delete it.
+- The right-hand panel renders a live **Income vs Expenses** bar chart that updates as transactions change.
+- **Save Data** / **Load Data** (bottom navigation) persist the account to `data/account.json` and reload it.
 
-- You can locate my visual component by viewing the right graphical split panel where the "Income vs Expenses" bar chart renders.
+## Architecture
 
-- You can save the state of my application by clicking the "Save Data" button at the bottom navigation panel.
+```
+src/main/
+├── model/
+│   ├── Account.java              — owns the transaction list, balance, filtering/sorting
+│   ├── Transaction.java          — a single income/expense/refund entry
+│   ├── TransactionType.java      — INCOME / EXPENSE / REFUND
+│   ├── TransactionCategory.java  — spending categories, each mapped to a type
+│   ├── SortOrder.java            — NEWEST / OLDEST / LARGEST / SMALLEST
+│   ├── Event.java                — a single logged event (timestamp + description)
+│   └── EventLog.java             — singleton log of everything that's happened to an account
+├── persistence/
+│   ├── Writable.java             — interface for JSON-serializable model objects
+│   ├── JsonWriter.java           — writes an Account out to disk as JSON
+│   └── JsonReader.java           — reads an Account back in from a JSON file
+└── ui/
+    ├── Main.java                 — entry point
+    ├── SimpleFinanceApp.java     — console-based interface
+    └── SimpleFinanceGUI.java     — Swing GUI: transaction list, add/remove, live bar chart, save/load
+```
 
-- You can reload the state of my application by clicking the "Load Data" button at the bottom navigation panel.
+Each model class enforces its own invariants (e.g. `Account` won't add a duplicate transaction, `Transaction` amounts must be positive), and `Account`/`Transaction` implement `Writable` so persistence stays decoupled from the model logic.
 
-# Phase 4: Task 2
-Wed Apr 01 09:44:01 PDT 2026
-Added transaction: PAYCHEQUE ($234.0)
-Wed Apr 01 09:44:14 PDT 2026
-Added transaction: FOOD ($34.0)
-Wed Apr 01 09:44:19 PDT 2026
-Removed transaction: FOOD
+## Design notes
 
-# Phase 4: Task 3
-My UML class diagram shows that the Account class is directly tied to the EventLog class for its logging duties. If I had more time, I would try to separate these parts. I would change the code so that the Account just tells other parts of the system when something changes, and then a separate logging class would listen for those signals to create the log entries. This would make the model simpler and easier to test because it wouldn't need to know how the logging works.
+`Account` currently calls directly into `EventLog` whenever a transaction changes. Given more time, I'd decouple that: have `Account` just emit change notifications and let a separate listener translate those into log entries, so the model doesn't need to know how logging works — better for testability and separation of concerns.
+
+## Building & running
+
+Requires a JDK (17+) and the JARs in `lib/` on the classpath (`org.json` for JSON persistence, JUnit for tests).
+
+```bash
+javac -cp "lib/*" -d bin $(find src/main -name "*.java")
+java -cp "bin:lib/*" ui.Main
+```
+
+On Windows, replace the `:` in the classpath with `;`.
+
+## Tests
+
+Unit tests cover the model (`Account`, `Transaction`) and persistence layer (`JsonReader`, `JsonWriter`) under `src/test`, run via the bundled JUnit console launcher in `lib/`.
