@@ -2,9 +2,9 @@
 
 ### A personal finance & expense tracker, written from scratch in Java
 
-**Simple Finance** is a Java desktop application for tracking income and expenses. Transactions live inside an account, are tagged with a category (food, rent, shopping, paycheque, transfers, etc.), and can be filtered, sorted, and summarized — with everything backed by JSON persistence and a Swing GUI that graphs income vs. expenses in real time.
+**Simple Finance** is a Java desktop application for tracking income and expenses. Transactions live inside an account, are tagged with a category (food, rent, shopping, paycheque, transfers, etc.), and can be filtered, sorted, and summarized by month — with everything backed by JSON persistence and a Swing GUI that graphs income vs. expenses in real time. Every add/remove is also recorded to an in-memory event log, printed out when the app closes, so there's a running audit trail of what happened during a session.
 
-I built this to get hands-on with object-oriented design, file persistence, and building a real desktop UI in Java — starting as a console app and growing into a full graphical interface.
+I built this to get hands-on with object-oriented design, file persistence, and building a real desktop UI in Java — starting as a console app and growing into a full graphical interface, with unit tests covering the model and persistence layers along the way.
 
 ---
 
@@ -26,6 +26,12 @@ I built this to get hands-on with object-oriented design, file persistence, and 
 - Select a transaction in the list and click **Remove Selected** to delete it.
 - The right-hand panel renders a live **Income vs Expenses** bar chart that updates as transactions change.
 - **Save Data** / **Load Data** (bottom navigation) persist the account to `data/account.json` and reload it.
+
+## Demo
+
+Adding transactions, filtering by category, and graphing monthly income vs. expenses:
+
+![App demo](screenshots/app-demo.gif)
 
 ## Architecture
 
@@ -57,7 +63,7 @@ Each model class enforces its own invariants (e.g. `Account` won't add a duplica
 
 ## Building & running
 
-Requires a JDK (17+) and the JARs in `lib/` on the classpath (`org.json` for JSON persistence, JUnit for tests).
+Requires a JDK (11+) and the JARs in `lib/` on the classpath (`org.json` for JSON persistence, JUnit for tests).
 
 ```bash
 javac -cp "lib/*" -d bin $(find src/main -name "*.java")
